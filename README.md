@@ -11,4 +11,4 @@ client program after a negotiation with the server.
 ## WebSocket messages
 
 The format spec for the messages sent over the WebSocket connections can be
-found in [[MESSAGES.md]]
+found in [MESSAGES.md](./MESSAGES.md)

@@ -1,7 +1,7 @@
 # Message spec
 
 To serialize messages, I chose [protocol buffers](https://protobuf.dev). See
-[[messages.proto]] for more info.
+[messages.proto](./messages.proto) for more info.
 
 Language-native code needs to get generated from the `.proto` spec file. To do
 so, run the `./gen_proto.sh` shell script.
