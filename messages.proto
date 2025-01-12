@@ -1,0 +1,14 @@
+syntax = "proto3";
+package webload;
+
+option go_package = "github.com/stanekondrej/webload/protobuf";
+
+message Stats {
+  float cpuUsage = 1;
+  uint64 memMax = 2;
+  uint64 memUsed = 3;
+  float memUsage = 4;
+  uint64 uptime = 5;
+}
+
+message Id { uint32 id = 1; }
