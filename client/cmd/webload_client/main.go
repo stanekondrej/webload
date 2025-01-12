@@ -17,6 +17,7 @@ import (
 
 type env struct {
 	serverUrl      *url.URL
+	frontendUrl    *url.URL
 	updateInterval time.Duration
 }
 
@@ -31,8 +32,17 @@ func getEnv() *env {
 		log.Fatal("Failed to parse url")
 	}
 
+	frontendUrlEnv, ok := os.LookupEnv("WEBLOAD_FRONTEND")
+	if !ok {
+		log.Fatal("No frontend url provided")
+	}
+	frontendUrl, err := url.Parse(frontendUrlEnv)
+	if err != nil {
+		log.Fatal("Failed to parse frontend url")
+	}
+
 	updateIntervalEnv, ok := os.LookupEnv("WEBLOAD_UPDATE_INTERVAL")
-	updateInterval := time.Second
+	updateInterval := time.Second * 5
 	if ok {
 		i, err := time.ParseDuration(updateIntervalEnv)
 		if err != nil {
@@ -44,6 +54,7 @@ func getEnv() *env {
 
 	return &env{
 		serverUrl,
+		frontendUrl,
 		updateInterval,
 	}
 }
@@ -88,7 +99,7 @@ func main() {
 	}
 	if t == websocket.TextMessage {
 		log.Printf("Session ID: %s", string(d))
-		log.Println("(Use this to view usage stats on the frontend)")
+		log.Printf("(Use it to view usage stats on the frontend, or go to %s/%s)", env.frontendUrl.String(), string(d))
 	}
 
 	go func() {
