@@ -15,7 +15,7 @@ var address string = fmt.Sprintf(":%d", PORT)
 func main() {
 	log.Println("Starting webload backend server")
 
-	h := server.NewHandler()
+	h := server.NewHandler(nil)
 
 	http.HandleFunc("/query", h.QueryFunc)     // query data
 	http.HandleFunc("/provide", h.ProvideFunc) // provide data

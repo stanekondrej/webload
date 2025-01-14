@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/stanekondrej/webload/server/pkg/pb/github.com/stanekondrej/webload/protobuf"
@@ -24,7 +25,8 @@ var upgrader = websocket.Upgrader{
 // This type is responsible for handling incoming requests for websocket
 // connections.
 type Handler struct {
-	Conns map[uint32]*struct {
+	UpdateInterval time.Duration
+	Conns          map[uint32]*struct {
 		conn        *websocket.Conn
 		lastMessage *protobuf.Stats
 	}
@@ -153,11 +155,19 @@ func (h *Handler) ProvideFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 // Construct a new Handler.
-func NewHandler() *Handler {
+func NewHandler(updateInterval *time.Duration) *Handler {
+	var d time.Duration
+	if updateInterval == nil {
+		d = time.Second * 5
+	} else {
+		d = *updateInterval
+	}
+
 	return &Handler{
 		Conns: map[uint32]*struct {
 			conn        *websocket.Conn
 			lastMessage *protobuf.Stats
 		}{},
+		UpdateInterval: d,
 	}
 }
